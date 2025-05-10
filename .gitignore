@@ -37,3 +37,4 @@ out/
 build*
 *.user
 CMakeSettings.json
+.vscode/

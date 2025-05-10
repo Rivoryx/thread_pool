@@ -8,6 +8,7 @@
 #include <ranges>
 #include <thread>
 #include <vector>
+#include <iostream>
 
 //#define _DISABLE_CONSTEXPR_MUTEX_CONSTRUCTOR
 
@@ -82,8 +83,13 @@ private:
             try {
                 task();
             }
-            catch (...) {
+            catch (std::filesystem::filesystem_error& e) {
                 --active_tasks_;
+                throw e;
+            }
+            catch(...) {
+                --active_tasks_;
+                std::cerr << "Unknown error in thread pool worker" << std::endl;
                 throw;
             }
 

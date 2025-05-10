@@ -31,5 +31,8 @@
 *.out
 *.app
 
+#IDE's files
 .vs/
 out/
+build*
+*.user

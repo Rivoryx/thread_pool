@@ -40,7 +40,7 @@ void GetWholeDirInner(const fs::path& path, std::vector<fs::path>& result, Threa
 		}
 		else {
 			++files;
-			subdir_files.push_back(dir_entry);
+			subdir_files.push_back(dir_entry.path());
 		}
 	}
 	{

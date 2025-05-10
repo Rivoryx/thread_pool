@@ -19,11 +19,6 @@ void GetWholeDirInner(const fs::path& path, std::vector<fs::path>& result, Threa
 		std::lock_guard lock(mx);
 		result.push_back(path);
 	}
-
-	if (!fs::is_directory(path)) {
-		++files;
-		return;
-	}
 	++dirs;
 
 	//Creating temp vector to insert all files with a single insertion later
@@ -31,6 +26,11 @@ void GetWholeDirInner(const fs::path& path, std::vector<fs::path>& result, Threa
 
 	// Parsing current directory
 	for (const auto& dir_entry : fs::directory_iterator(path, fs::directory_options::skip_permission_denied)) {
+		
+		if (fs::is_symlink(dir_entry)) {
+			continue;
+		}
+
 		// Running recursion for all subdirs, using ThreadPool
 		if (fs::is_directory(dir_entry)) {
 			++dirs;
@@ -50,6 +50,13 @@ void GetWholeDirInner(const fs::path& path, std::vector<fs::path>& result, Threa
 }
 
 std::vector<fs::path> GetWholeDir(const fs::path& path) {
+	if (!fs::exists(path)) {
+		return {};
+	}
+	if (!fs::is_directory(path)) {
+		++files;
+		return {path};
+	}
 	std::vector<fs::path> result;
 	ThreadPool pool;
 	{

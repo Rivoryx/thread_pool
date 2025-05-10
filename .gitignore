@@ -36,3 +36,4 @@
 out/
 build*
 *.user
+CMakeSettings.json

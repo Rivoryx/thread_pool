@@ -33,7 +33,6 @@ void GetWholeDirInner(const fs::path& path, std::vector<fs::path>& result, Threa
 
 		// Running recursion for all subdirs, using ThreadPool
 		if (fs::is_directory(dir_entry)) {
-			++dirs;
 			pool.Enqueue([dir_entry, &result, &pool] { 
 				GetWholeDirInner(dir_entry.path(), result, pool); 
 			});

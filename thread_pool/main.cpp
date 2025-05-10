@@ -75,7 +75,7 @@ std::vector<fs::path> GetWholeDir(const fs::path& path) {
 	std::vector<fs::path> result;
 	ThreadPool pool;
 	{
-		LOG_DURATION(std::string("par"));
+		LOG_DURATION(std::string("Elapsed time"));
 		GetWholeDirInner(path, result, pool);
 		// Waiting for all threads to finish
 		pool.Wait();

@@ -19,11 +19,6 @@ static std::string from_utf8(const std::u8string& s) {
 }
 
 void GetWholeDirInner(const fs::path& path, std::vector<fs::path>& result, ThreadPool& pool) {
-	{
-		// Protecting from race for result access
-		std::lock_guard lock(mx);
-		result.push_back(path);
-	}
 	++dirs;
 
 	//Creating temp vector to insert all files with a single insertion later
@@ -60,6 +55,7 @@ void GetWholeDirInner(const fs::path& path, std::vector<fs::path>& result, Threa
 
 	{
 		std::lock_guard lock(mx);
+		result.push_back(path);
 		result.insert(std::end(result), std::begin(subdir_files), std::end(subdir_files));
 	}
 }
@@ -94,7 +90,7 @@ void Print(Container& container, std::ostream& out = std::cout) {
 }
 
 int main() {
-	fs::path path("C:\\Windows\\");
+	fs::path path("D:\\Games\\");
 	std::cout << "Start with " << from_utf8(path.u8string()) << std::endl;
 	std::vector<fs::path> vector = GetWholeDir(path);
 	std::ofstream of("result.txt", std::ios::binary);
